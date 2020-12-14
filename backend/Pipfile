@@ -1,0 +1,23 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+django = "*"
+djangorestframework = "*"
+django-cors-headers = "*"
+djangorestframework-simplejwt = "*"
+pillow = "*"
+psycopg2 = "*"
+psycopg2-binary = "*"
+pylint-django = "*"
+scrapy = "*"
+django-environ = "*"
+scrapy-djangoitem = "*"
+
+[dev-packages]
+pylint = "*"
+
+[requires]
+python_version = "3.9"
