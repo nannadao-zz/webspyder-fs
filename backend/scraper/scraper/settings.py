@@ -9,15 +9,16 @@
 
 BOT_NAME = 'scraper'
 
-SPIDER_MODULES = ['scraper.spiders']
-NEWSPIDER_MODULE = 'scraper.spiders'
+SPIDER_MODULES = ['scraper.scraper.spiders']
+NEWSPIDER_MODULE = 'scraper.scraper.spiders'
 
+USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36'
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'scraper (+http://www.yourdomain.com)'
 
 # Obey robots.txt rules
-ROBOTSTXT_OBEY = True
+ROBOTSTXT_OBEY = False
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS = 32
@@ -65,6 +66,12 @@ ROBOTSTXT_OBEY = True
 #ITEM_PIPELINES = {
 #    'scraper.pipelines.ScraperPipeline': 300,
 #}
+
+ITEM_PIPELINES = {
+   'scraper.scraper.pipelines.PropertyHotelPipeline': 100,
+   'scraper.scraper.pipelines.PropertyRoomTypePipeline': 200,
+   'scraper.scraper.pipelines.PropertyRoomPricePipeline': 300,
+}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html

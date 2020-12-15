@@ -15,6 +15,8 @@ pylint-django = "*"
 scrapy = "*"
 django-environ = "*"
 scrapy-djangoitem = "*"
+selenium = "*"
+word2number = "*"
 
 [dev-packages]
 pylint = "*"
