@@ -132,7 +132,5 @@ class PriceSpider(CrawlSpider):
       ## Find room price
       room_price = hotel_container.xpath(".//div[@class='bui-price-display__value prco-inline-block-maker-helper ']/text()").extract_first().strip().replace('€ ', '')
       property_loader.add_value('room_price', room_price)
-
       
-
       yield property_loader.load_item()
