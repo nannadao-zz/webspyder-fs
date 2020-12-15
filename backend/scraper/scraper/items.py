@@ -7,6 +7,5 @@ import scrapy
 from scrapy_djangoitem import DjangoItem
 from properties.models import PriceProperty
 
-class ScraperItem(scrapy.Item):
+class ScraperItem(DjangoItem):
     django_model = PriceProperty
-    pass

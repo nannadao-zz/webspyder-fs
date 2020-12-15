@@ -68,9 +68,7 @@ ROBOTSTXT_OBEY = False
 #}
 
 ITEM_PIPELINES = {
-   'scraper.scraper.pipelines.PropertyHotelPipeline': 100,
-   'scraper.scraper.pipelines.PropertyRoomTypePipeline': 200,
-   'scraper.scraper.pipelines.PropertyRoomPricePipeline': 300,
+   'scraper.scraper.pipelines.ScraperPipeline': 100,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)

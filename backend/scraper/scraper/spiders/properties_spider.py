@@ -3,6 +3,7 @@ from scrapy.linkextractors import LinkExtractor
 from scrapy.loader import ItemLoader
 from scrapy.selector import Selector
 from scrapy.http import TextResponse, Request
+from scraper.scraper.items import ScraperItem
 
 import re
 import time
@@ -116,21 +117,22 @@ class PriceSpider(CrawlSpider):
 
   ## Find element and add to item loader
   def parse_property(self, response): 
-    property_loader = ItemLoader(item=ScraperItem(), response=response)
-
+    
     container = response.xpath("//div[@id='hotellist_inner']")
     hotel_containers = container.xpath(".//div[@class='sr_item  sr_item_new sr_item_default sr_property_block  sr_flex_layout           ']")
     for hotel_container in hotel_containers:
+      i = ScraperItem()
       ## Find hotel name
-      hotel_name = hotel_container.xpath(".//div[1]/div[1]/div[1]/h3/a/span[1]/text()").extract_first().strip()
-      property_loader.add_value('hotel_name', hotel_name)
+      hotel_name = hotel_container.xpath(".//div[1]/div[1]/div[1]/h3/a/span[1]/text()").extract()[0].strip()
+      i['hotel_name'] = hotel_name
       
       ## Find room type
-      room_type = hotel_container.css("div.room_link span strong::text").extract_first().strip()
-      property_loader.add_value('room_type', room_type)
+      room_type = hotel_container.css("div.room_link span strong::text").extract()[0].strip()
+      i['room_type'] = room_type
       
       ## Find room price
-      room_price = hotel_container.xpath(".//div[@class='bui-price-display__value prco-inline-block-maker-helper ']/text()").extract_first().strip().replace('€ ', '')
-      property_loader.add_value('room_price', room_price)
-      
-      yield property_loader.load_item()
+      room_original = hotel_container.xpath(".//div[@class='bui-price-display__value prco-inline-block-maker-helper ']/text()").extract()[0].strip()
+      room_price = int(''.join(e for e in room_original if e.isalnum()))
+      i['room_price'] = room_price
+
+      yield i
