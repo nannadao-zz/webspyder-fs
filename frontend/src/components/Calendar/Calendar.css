@@ -1,0 +1,137 @@
+.calendar {
+  display: block;
+  background: white;
+  border-radius: 20px;
+  border: 1px solid rgba(207, 207, 207, 0.794);
+  width: 80%;
+}
+
+.calendar .header {
+  display: flex;
+  font-weight: 700;
+  padding: 1.5em 0;
+  border-bottom: 1px solid lightgray;
+}
+
+/* 3 columns for icons and month */
+.calendar .header .column {
+  flex-basis: calc(100% / 3);
+  width: calc(100% / 3);
+  display: flex;
+  justify-content: center;
+}
+
+.calendar .header .icon {
+  cursor: pointer;
+  transition: 0.15s ease-out;
+  display: flex;
+  justify-content: center;
+}
+
+.calendar .header .icon:hover {
+  transform: scale(1.75);
+  transition: 0.25s ease-out;
+  color: dodgerblue;
+}
+
+.calendar .header .icon:first-of-type {
+  margin-left: 1em;
+}
+
+.calendar .header .icon:last-of-type {
+  margin-right: 1em;
+}
+
+/* Weekdays row */
+.calendar .days {
+  display: flex;
+  font-weight: 600;
+  color: gray;
+  font-size: 70%;
+  padding: 0.75em 0;
+  border-bottom: 1px solid lightgray;
+}
+
+/* Each day */
+.calendar .body .cell {
+  position: relative;
+  height: 3em;
+  border-right: 1px solid lightgray;
+  overflow: hidden;
+  cursor: pointer;
+  background: white;
+}
+
+.calendar .body .cell:hover {
+  background: whitesmoke;
+  transition: 0.5s ease-out;
+}
+
+.calendar .body .cell .number {
+  font-size: 82.5%;
+}
+
+.calendar .body .cell:hover .numberCircle {
+  display: inline-block;
+  line-height: 0px;
+  border-radius: 50%;
+  background-color: #a498f0c0;
+  font-size: 16px;
+  padding: 2px;
+}
+
+.calendar .body .cell .numberCircle span {
+  display: inline-block;
+  padding-top: 50%;
+  padding-bottom: 50%;
+  margin-left: 8px;
+  margin-right: 8px;
+}
+
+.calendar .body .selected .number {
+  display: inline-block;
+  line-height: 0px;
+  border-radius: 50%;
+  border: 2px solid #4741f2;
+  font-size: 16px;
+}
+
+.calendar .body .row {
+  border-bottom: 1px solid lightgray;
+  display: flex;
+}
+
+.calendar .body .row:last-child {
+  border-bottom: none;
+}
+
+.calendar .body .cell:last-child {
+  border-right: none;
+}
+
+.calendar .body .disabled {
+  color: lightgray;
+  pointer-events: none;
+}
+
+.calendar .body .row:last-child .cell:first-of-type {
+  border-radius: 0 0 0 20px;
+}
+
+.calendar .body .row:last-child .cell:last-of-type {
+  border-radius: 0 0 20px 0;
+}
+
+.calendar .body .cell:hover .bg,
+.calendar .body .selected .bg {
+  opacity: 0.2;
+  transition: 0.5s ease-in;
+}
+.calendar .body .column {
+  flex-grow: 0;
+  flex-basis: calc(100% / 7);
+  width: calc(100% / 7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

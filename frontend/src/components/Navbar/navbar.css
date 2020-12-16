@@ -1,0 +1,35 @@
+.navbar {
+  top: 0;
+  max-width: 100vw;
+  height: 80px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 5rem;
+}
+
+.navbar-logo {
+  font-family: 'Montserrat', sans-serif;
+  color: #4741f2;
+  font-size: 32px;
+}
+
+.navbar-links {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.navbar-links h4 {
+  padding: 0 13px;
+  font-size: 18px;
+  margin-left: 1em;
+}
+
+.navbar-links h4:hover {
+  background-color: #e7e7e7;
+  padding: 7px 13px;
+  border-radius: 15px;
+  cursor: pointer;
+}
