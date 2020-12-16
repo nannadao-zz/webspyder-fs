@@ -16,7 +16,8 @@ scrapy = "*"
 django-environ = "*"
 scrapy-djangoitem = "*"
 selenium = "*"
-word2number = "*"
+scrapyd = "*"
+python-scrapyd-api = "*"
 
 [dev-packages]
 pylint = "*"
