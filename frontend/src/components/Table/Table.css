@@ -1,0 +1,57 @@
+.Table {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
+  margin: 2rem 0;
+}
+
+.Table-head {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: stretch;
+  border: 1px solid rgb(172, 172, 172);
+  background-color: #615cf16c;
+}
+
+.Table-head p {
+  font-size: 19px;
+  font-weight: 600;
+}
+
+.table-content {
+  display: flex;
+  flex-direction: row;
+  border-bottom: 1px solid lightgray;
+  border-left: 1px solid lightgray;
+  border-right: 1px solid lightgray;
+}
+
+.large-cell {
+  flex-grow: 0;
+  flex-basis: 40%;
+  width: 40%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 10px;
+}
+
+.large-cell i {
+  margin-left: 1rem;
+}
+
+.small-cell i {
+  margin-left: 1rem;
+}
+
+.small-cell {
+  flex-grow: 0;
+  flex-basis: 20%;
+  width: 20%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 10px;
+}

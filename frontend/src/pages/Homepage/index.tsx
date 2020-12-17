@@ -1,11 +1,23 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { format } from 'date-fns'
+
+import Table from '../../components/Table'
+import { AppState } from '../../types'
 import Navbar from '../../components/Navbar'
 import Calendar from '../../components/Calendar'
+import { fetchHotelsList } from '../../redux/actions/reportActions'
 
 import './Homepage.css'
 
 const Homepage = () => {
+  const dispatch = useDispatch()
+  useEffect(() => {
+    dispatch(fetchHotelsList('2020-12-16'))
+  }, [dispatch])
+
   const [searchHotel, setSearchHotel] = useState('')
+  const { hotels } = useSelector((state: AppState) => state.report)
 
   return (
     <>
@@ -21,7 +33,8 @@ const Homepage = () => {
           <Calendar />
         </div>
         <div className='Homepage-content'>
-          <h2> Reports </h2>
+          <h2> Helsinki ({hotels.length} properties) </h2>
+          <Table />
         </div>
       </div>
     </>

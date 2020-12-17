@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { useDispatch } from 'react-redux'
 import moment from 'moment'
 import {
   addDays,
@@ -14,12 +15,14 @@ import {
   parse
 } from 'date-fns'
 
+import { fetchHotelsList } from '../../redux/actions/reportActions'
 import './Calendar.css'
 
 export default function Calendar() {
+  const dispatch = useDispatch()
   const [currentDate, setCurrentDate] = useState(new Date())
   const [selectedDate, setSelectedDate] = useState(new Date())
-  console.log(`Selected day: ${moment(selectedDate).format('MMMM Do YYYY')}`)
+
   const nextMonth = () => {
     setCurrentDate(addMonths(currentDate, 1))
   }
@@ -28,10 +31,14 @@ export default function Calendar() {
     setCurrentDate(subMonths(currentDate, 1))
   }
 
+  useEffect(() => {
+    dispatch(fetchHotelsList(format(selectedDate, 'yyyy-MM-dd').toString()))
+  }, [dispatch, selectedDate])
+
   const header = () => {
     const dateFormat = 'MMMM yyyy'
     return (
-      <div className='header'>
+      <div className='header' key='header'>
         <div className='column col-start'>
           <div className='icon' onClick={prevMonth}>
             <i className='fas fa-angle-left'></i>
@@ -75,7 +82,6 @@ export default function Calendar() {
     const onDateClick = (day: any) => {
       setSelectedDate(day)
     }
-
     let days = []
     let day = startDate
     let formattedDate = ''
@@ -83,9 +89,7 @@ export default function Calendar() {
     while (day <= endDate) {
       for (let i = 0; i < 7; i++) {
         formattedDate = format(day, dateFormat)
-
         let cloneDay = formattedDate
-
         days.push(
           <div
             className={`column cell 
@@ -103,7 +107,12 @@ export default function Calendar() {
         day = addDays(day, 1)
       }
 
-      rows.push(<div className='row'> {days} </div>)
+      rows.push(
+        <div className='row' key={format(day, 'ww')}>
+          {' '}
+          {days}{' '}
+        </div>
+      )
       days = []
     }
     return <div className='body'> {rows} </div>
@@ -111,9 +120,9 @@ export default function Calendar() {
 
   return (
     <div className='calendar'>
-      <div> {header()} </div>
-      <div> {daysOfWeek()} </div>
-      <div> {cells()} </div>
+      <div key='calendar-header'> {header()} </div>
+      <div key='calendar-body'> {daysOfWeek()} </div>
+      <div key='calendar-cells'> {cells()} </div>
     </div>
   )
 }

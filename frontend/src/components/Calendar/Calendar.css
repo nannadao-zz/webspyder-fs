@@ -3,7 +3,8 @@
   background: white;
   border-radius: 20px;
   border: 1px solid rgba(207, 207, 207, 0.794);
-  width: 80%;
+  width: 90%;
+  margin: 2rem 0;
 }
 
 .calendar .header {
@@ -88,6 +89,10 @@
   margin-right: 8px;
 }
 
+.calendar .body .disabled .numberCircle span {
+  color: lightgrey;
+}
+
 .calendar .body .selected .number {
   display: inline-block;
   line-height: 0px;
@@ -122,11 +127,6 @@
   border-radius: 0 0 20px 0;
 }
 
-.calendar .body .cell:hover .bg,
-.calendar .body .selected .bg {
-  opacity: 0.2;
-  transition: 0.5s ease-in;
-}
 .calendar .body .column {
   flex-grow: 0;
   flex-basis: calc(100% / 7);
