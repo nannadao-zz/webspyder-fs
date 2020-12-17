@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react'
-import { useDispatch } from 'react-redux'
+import React, { useState } from 'react'
 import moment from 'moment'
 import {
   addDays,
@@ -11,18 +10,15 @@ import {
   endOfMonth,
   endOfWeek,
   isSameDay,
-  isSameMonth,
-  parse
+  isSameMonth
 } from 'date-fns'
 
-import { fetchHotelsList } from '../../redux/actions/reportActions'
+import { CalendarProps } from '../../types'
 import './Calendar.css'
 
-export default function Calendar() {
-  const dispatch = useDispatch()
+const Calendar: React.FC<CalendarProps> = ({ handleSearchDateChange }) => {
   const [currentDate, setCurrentDate] = useState(new Date())
   const [selectedDate, setSelectedDate] = useState(new Date())
-
   const nextMonth = () => {
     setCurrentDate(addMonths(currentDate, 1))
   }
@@ -30,10 +26,6 @@ export default function Calendar() {
   const prevMonth = () => {
     setCurrentDate(subMonths(currentDate, 1))
   }
-
-  useEffect(() => {
-    dispatch(fetchHotelsList(format(selectedDate, 'yyyy-MM-dd').toString()))
-  }, [dispatch, selectedDate])
 
   const header = () => {
     const dateFormat = 'MMMM yyyy'
@@ -55,11 +47,10 @@ export default function Calendar() {
       </div>
     )
   }
-
   const daysOfWeek = () => {
     const dateFormat = 'ccc'
     const days = []
-    let startDate = startOfWeek(currentDate)
+    const startDate = startOfWeek(currentDate)
 
     for (let i = 0; i < 7; i++) {
       days.push(
@@ -78,9 +69,9 @@ export default function Calendar() {
     const monthEnd = endOfMonth(monthStart)
     const startDate = startOfWeek(monthStart)
     const endDate = endOfWeek(monthEnd)
-
     const onDateClick = (day: any) => {
       setSelectedDate(day)
+      handleSearchDateChange(format(day, 'yyyy-MM-dd'))
     }
     let days = []
     let day = startDate
@@ -89,13 +80,18 @@ export default function Calendar() {
     while (day <= endDate) {
       for (let i = 0; i < 7; i++) {
         formattedDate = format(day, dateFormat)
-        let cloneDay = formattedDate
+        const cloneDayWithoutFormat = day
         days.push(
           <div
-            className={`column cell 
-            ${!isSameMonth(day, monthStart) ? 'disabled' : isSameDay(day, selectedDate) ? 'selected' : ''}`}
+            className={`column cell ${
+              !isSameMonth(day, monthStart)
+                ? 'disabled'
+                : isSameDay(day, selectedDate)
+                ? 'selected'
+                : ''
+            } `}
             key={moment(day).format('MMMM Do YYYY')}
-            onClick={() => onDateClick(parse(cloneDay, dateFormat, new Date()))}
+            onClick={() => onDateClick(cloneDayWithoutFormat)}
           >
             <p className='number'>
               <span className='numberCircle'>
@@ -126,3 +122,5 @@ export default function Calendar() {
     </div>
   )
 }
+
+export default Calendar

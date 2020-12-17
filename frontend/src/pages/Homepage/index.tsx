@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { format } from 'date-fns'
 
@@ -12,13 +12,16 @@ import './Homepage.css'
 
 const Homepage = () => {
   const dispatch = useDispatch()
-  useEffect(() => {
-    dispatch(fetchHotelsList('2020-12-16'))
-  }, [dispatch])
 
   const [searchHotel, setSearchHotel] = useState('')
+  const [searchDate, setSearchDate] = useState(format(new Date(), 'yyyy-MM-dd'))
   const { hotels } = useSelector((state: AppState) => state.report)
 
+  useEffect(() => {
+    dispatch(fetchHotelsList(searchDate))
+  }, [dispatch, searchDate])
+
+  const handleSearchDateChange = useCallback((date: string) => setSearchDate(date), [])
   return (
     <>
       <Navbar />
@@ -27,14 +30,18 @@ const Homepage = () => {
           <h2> Filter Data </h2>
           <div className='Homepage-form'>
             <form>
-              <input type='text' value={searchHotel} onChange={(e) => setSearchHotel(e.target.value)} />
+              <input
+                type='text'
+                value={searchHotel}
+                onChange={(e) => setSearchHotel(e.target.value)}
+              />
             </form>
           </div>
-          <Calendar />
+          <Calendar searchDate={searchDate} handleSearchDateChange={handleSearchDateChange} />
         </div>
         <div className='Homepage-content'>
           <h2> Helsinki ({hotels.length} properties) </h2>
-          <Table />
+          <Table searchDate={searchDate} />
         </div>
       </div>
     </>

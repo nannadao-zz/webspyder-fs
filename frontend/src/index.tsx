@@ -16,6 +16,7 @@ const WithProvider = () => (
     </Router>
   </Provider>
 )
+
 ReactDOM.render(
   <React.StrictMode>
     <WithProvider />

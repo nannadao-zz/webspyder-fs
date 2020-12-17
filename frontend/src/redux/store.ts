@@ -25,7 +25,11 @@ const makeStore = (initialState = initState) => {
     initialState = JSON.parse(localStorageState)
   }
 
-  const store = createStore(createRootReducer(), initialState, composeEnhancers(applyMiddleware(...middlewares)))
+  const store = createStore(
+    createRootReducer(),
+    initialState,
+    composeEnhancers(applyMiddleware(...middlewares))
+  )
 
   if ((module as any).hot) {
     ;(module as any).hot.accept('./reducers', () => {
