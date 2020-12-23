@@ -17,9 +17,9 @@ from scraper.scraper.items import ScraperItem
 
 
 class PriceSpider(CrawlSpider):
-    name = "booking"
-    allowed_domains = ["booking.com"]
-    start_urls = ['https://www.booking.com/city/fi/helsinki.en-gb.html?label=gen173nr-1BCAEoggI46AdIM1gEaEiIAQGYAQm4AQfIAQzYAQHoAQGIAgGoAgO4Aveuvv4FwAIB0gIkMWZkODFkYTYtY2M5Yy00N2E1LTlhNGItNmQ0YjZmZjkxYTFk2AIF4AIB;sid=d2a36dfc62f9e56716f35a50ec9c0d1d;breadcrumb=searchresults_irene;srpvid=76826ad4b0170334&']
+    name = "price"
+    allowed_domains = ["url.com"]
+    start_urls = ['url']
     page_urls = []
 
     # Set up chrome driver
@@ -42,7 +42,7 @@ class PriceSpider(CrawlSpider):
         checkin_monthyear_input = f'{dt.strftime("%B")} {dt.strftime("%Y")}'
         checkin_date_input = f'{dt.day}, {dt.strftime("%A")}'
 
-        self.driver.get('https://www.booking.com/city/fi/helsinki.en-gb.html?label=gen173nr-1BCAEoggI46AdIM1gEaEiIAQGYAQm4AQfIAQzYAQHoAQGIAgGoAgO4Aveuvv4FwAIB0gIkMWZkODFkYTYtY2M5Yy00N2E1LTlhNGItNmQ0YjZmZjkxYTFk2AIF4AIB;sid=d2a36dfc62f9e56716f35a50ec9c0d1d;breadcrumb=searchresults_irene;srpvid=76826ad4b0170334&')
+        self.driver.get('url')
         time.sleep(4)
 
         # Input checkin date and search
