@@ -21,7 +21,6 @@ python-scrapyd-api = "*"
 whitenoise = "*"
 django-heroku = "*"
 gunicorn = "*"
-fake-useragent = "*"
 dj-database-url = "*"
 
 [dev-packages]
