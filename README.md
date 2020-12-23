@@ -14,7 +14,7 @@ Client side is included to filter and display data.
 
 1. Deployment
 
-Project is live at: [site](https://django-react-webspyder.herokuapp.com/)
+Project is live [here](https://django-react-webspyder.herokuapp.com/)
 
 2. Local usage
 
