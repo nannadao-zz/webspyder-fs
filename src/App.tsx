@@ -1,10 +1,10 @@
 import React from 'react'
 
-import Homepage from './pages/Homepage'
+import Routes from './Routes'
 import './App.css'
 
 function App() {
-  return <Homepage />
+  return <Routes />
 }
 
 export default App

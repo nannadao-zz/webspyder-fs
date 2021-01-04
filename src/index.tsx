@@ -1,7 +1,9 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
+import { CssBaseline } from '@material-ui/core'
 import { BrowserRouter as Router } from 'react-router-dom'
+import { StylesProvider } from '@material-ui/core/styles'
 
 import './index.css'
 import App from './App'
@@ -11,9 +13,12 @@ const store = makeStore()
 
 const WithProvider = () => (
   <Provider store={store}>
-    <Router>
-      <App />
-    </Router>
+    <StylesProvider injectFirst>
+      <Router>
+        <CssBaseline />
+        <App />
+      </Router>
+    </StylesProvider>
   </Provider>
 )
 

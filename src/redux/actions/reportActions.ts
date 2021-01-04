@@ -7,7 +7,10 @@ import {
   HOTELS_LIST_FAILED,
   SORT_LIST_REQUESTED,
   SORT_LIST_SUCCEED,
-  SORT_LIST_FAILED
+  SORT_LIST_FAILED,
+  HOTEL_NAMES_REQUESTED,
+  HOTEL_NAMES_SUCCEED,
+  HOTEL_NAMES_FAILED
 } from '../../types'
 
 export const fetchHotelsList = (date: string) => async (dispatch: Dispatch) => {
@@ -36,13 +39,21 @@ const fetchHotelsListFailed = (error: string) => {
   }
 }
 
-export const fetchSortList = (searchDate: string, sortBy: string, descending: string) => async (
-  dispatch: Dispatch
-) => {
+export const fetchSortList = (
+  searchDate: string,
+  sortBy: string,
+  descending: string,
+  filterHotels: string[]
+) => async (dispatch: Dispatch) => {
   try {
     dispatch({ type: SORT_LIST_REQUESTED })
     const { data } = await axios.get('http://localhost:8000/api/report/sorted/', {
-      params: { date: searchDate, sortBy: sortBy, descending: descending }
+      params: {
+        date: searchDate,
+        sortBy: sortBy,
+        descending: descending,
+        filterHotels: filterHotels
+      }
     })
     return dispatch(fetchSortListSucceed(data))
   } catch (error) {
@@ -60,6 +71,42 @@ const fetchSortListSucceed = (data: any) => {
 const fetchSortListFailed = (error: string) => {
   return {
     type: SORT_LIST_FAILED,
+    payload: error
+  }
+}
+
+export const fetchHotelNames = (
+  year: string,
+  month: string,
+  start_day: string,
+  end_day: string
+) => async (dispatch: Dispatch) => {
+  try {
+    dispatch({ type: HOTEL_NAMES_REQUESTED })
+    const { data } = await axios.get('http://localhost:8000/api/report/hotels/', {
+      params: {
+        year: year,
+        month: month,
+        start_day: start_day,
+        end_day: end_day
+      }
+    })
+    return dispatch(fetchHotelNamesSucceed(data))
+  } catch (error) {
+    return dispatch(fetchHotelNamesFailed(error.message))
+  }
+}
+
+const fetchHotelNamesSucceed = (data: any) => {
+  return {
+    type: HOTEL_NAMES_SUCCEED,
+    payload: data
+  }
+}
+
+const fetchHotelNamesFailed = (error: string) => {
+  return {
+    type: HOTEL_NAMES_FAILED,
     payload: error
   }
 }

@@ -5,35 +5,35 @@ import { fetchSortList } from '../../redux/actions/reportActions'
 import { AppState, TableProps, HotelReportState } from '../../types'
 import './Table.css'
 
-const Table: React.FC<TableProps> = ({ searchDate }) => {
-  const dispatch = useDispatch()
+const Table: React.FC<TableProps> = ({ searchDate, searchHotels }) => {
   const { hotels } = useSelector((state: AppState) => state.report)
+  const dispatch = useDispatch()
   const [isDescending, setIsDescending] = useState(false)
 
   const handleSortHotelName = () => {
     setIsDescending(!isDescending)
     if (isDescending) {
-      dispatch(fetchSortList(searchDate, 'hotel_name', 'true'))
+      dispatch(fetchSortList(searchDate, 'hotel_name', 'true', searchHotels))
     } else if (!isDescending) {
-      dispatch(fetchSortList(searchDate, 'hotel_name', 'false'))
+      dispatch(fetchSortList(searchDate, 'hotel_name', 'false', searchHotels))
     }
   }
 
   const handleSortRoomType = () => {
     setIsDescending(!isDescending)
     if (isDescending) {
-      dispatch(fetchSortList(searchDate, 'room_type', 'true'))
+      dispatch(fetchSortList(searchDate, 'room_type', 'true', searchHotels))
     } else if (!isDescending) {
-      dispatch(fetchSortList(searchDate, 'room_type', 'false'))
+      dispatch(fetchSortList(searchDate, 'room_type', 'false', searchHotels))
     }
   }
 
   const handleSortRoomPrice = () => {
     setIsDescending(!isDescending)
     if (isDescending) {
-      dispatch(fetchSortList(searchDate, 'room_price', 'true'))
+      dispatch(fetchSortList(searchDate, 'room_price', 'true', searchHotels))
     } else if (!isDescending) {
-      dispatch(fetchSortList(searchDate, 'room_price', 'false'))
+      dispatch(fetchSortList(searchDate, 'room_price', 'false', searchHotels))
     }
   }
 

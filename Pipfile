@@ -22,6 +22,8 @@ whitenoise = "*"
 django-heroku = "*"
 gunicorn = "*"
 dj-database-url = "*"
+pandas = "*"
+python-dateutil = "*"
 
 [dev-packages]
 pylint = "*"

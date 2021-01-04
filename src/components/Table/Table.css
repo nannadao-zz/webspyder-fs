@@ -60,3 +60,19 @@
   display: flex;
   justify-content: center;
 }
+
+@media only screen and (max-width: 700px) {
+  .Table-head p {
+    font-size: 16px;
+  }
+
+  .large-cell {
+    flex-basis: 35%;
+    width: 35%;
+  }
+
+  .small-cell {
+    flex-basis: 30%;
+    width: 30%;
+  }
+}

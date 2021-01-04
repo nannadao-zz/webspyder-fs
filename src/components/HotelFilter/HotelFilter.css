@@ -1,0 +1,14 @@
+.MuiAutocomplete-endAdornment {
+  top: 0;
+  left: 0;
+  position: inherit;
+}
+
+.MuiFormControl-fullWidth {
+  display: flex;
+}
+
+.MuiAutocomplete-hasPopupIcon.MuiAutocomplete-hasClearIcon
+  .MuiAutocomplete-inputRoot[class*='MuiOutlinedInput-root'] {
+  padding-right: 9px;
+}

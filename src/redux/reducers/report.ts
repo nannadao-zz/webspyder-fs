@@ -5,12 +5,15 @@ import {
   SORT_LIST_REQUESTED,
   SORT_LIST_SUCCEED,
   SORT_LIST_FAILED,
+  HOTEL_NAMES_REQUESTED,
+  HOTEL_NAMES_SUCCEED,
+  HOTEL_NAMES_FAILED,
   ReportState,
   ReportActions
 } from '../../types'
 
 export default function report(
-  state: ReportState = { hotels: [], loading: false, error: '' },
+  state: ReportState = { hotels: [], hotel_names: [], loading: false, error: '' },
   action: ReportActions
 ): ReportState {
   switch (action.type) {
@@ -51,6 +54,23 @@ export default function report(
         ...state,
         loading: false,
         error: sortedError
+      }
+    case HOTEL_NAMES_REQUESTED:
+      return {
+        ...state,
+        loading: true
+      }
+    case HOTEL_NAMES_SUCCEED:
+      return {
+        ...state,
+        loading: false,
+        hotel_names: action.payload
+      }
+    case HOTEL_NAMES_FAILED:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload
       }
     default:
       return state
