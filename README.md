@@ -8,7 +8,7 @@ Client side is included to filter and display data.
 1. Backend: Django
 2. Frontend: React - Redux - TypeScript
 3. Database: Heroku Postgresql
-4. Frameworks: Scrapy - Selenium
+4. Frameworks: Scrapy - Selenium - Pandas
 
 ## Usage
 
