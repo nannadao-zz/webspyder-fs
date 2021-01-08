@@ -46,15 +46,18 @@ export default function Dashboard() {
     )
     const fetchDashboard = async () => {
       try {
-        const { data } = await axios.get('http://localhost:8000/api/report/dashboard/', {
-          params: {
-            hotel: searchHotel,
-            year: format(currentMonth, 'y'),
-            month: format(currentMonth, 'M'),
-            start_day: format(currentMonth, 'd'),
-            end_day: format(endOfMonth(currentMonth), 'd')
+        const { data } = await axios.get(
+          'https://django-react-webspyder.herokuapp.com/api/report/dashboard/',
+          {
+            params: {
+              hotel: searchHotel,
+              year: format(currentMonth, 'y'),
+              month: format(currentMonth, 'M'),
+              start_day: format(currentMonth, 'd'),
+              end_day: format(endOfMonth(currentMonth), 'd')
+            }
           }
-        })
+        )
         const labels: string[] = []
         const values: number[] = []
         data[0].line_graph.forEach((item: LineGraphItem) => {
@@ -71,8 +74,8 @@ export default function Dashboard() {
         })
         setBarChartLabels(barChartLabels)
         setBarChartValues(barChartValues)
-        setCurMonthAvg(data[0].cur_avg.room_price__avg)
-        setPrevMonthAvg(data[0].prev_avg.room_price__avg)
+        setCurMonthAvg(data[0].cur_avg.room_price__avg.toFixed(2))
+        setPrevMonthAvg(data[0].prev_avg.room_price__avg.toFixed(2))
       } catch (error) {
         console.log(error)
       }
@@ -151,7 +154,7 @@ export default function Dashboard() {
 
           <div className='Dashboard-Barchart'>
             <Bar
-              height={200}
+              height={250}
               width={600}
               data={{
                 labels: barChartLabels,

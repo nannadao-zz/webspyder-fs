@@ -1,10 +1,13 @@
+from scrapy.spiders import CrawlSpider, Rule
+from scrapy.linkextractors import LinkExtractor
+from scrapy.loader import ItemLoader
+from scrapy.selector import Selector
+from scrapy.http import TextResponse, Request
+from selenium.webdriver.chrome.options import Options
+from scraper.scraper.items import ScraperItem
 import os
 import re
 import time
-from scrapy.spiders import CrawlSpider
-from scrapy.loader import ItemLoader
-from scrapy.http import Request
-from scraper.scraper.items import ScraperItem
 from datetime import datetime
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
@@ -12,29 +15,43 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
+from fake_useragent import UserAgent
 
 from scraper.scraper.items import ScraperItem
 
 
 class PriceSpider(CrawlSpider):
-    name = "price"
-    allowed_domains = ["url.com"]
-    start_urls = ['url']
-    page_urls = []
+    name = "booking"
+    ua = UserAgent()
+    userAgent = ua.random
 
-    # Set up chrome driver
     options = webdriver.ChromeOptions()
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-gpu")
     options.add_argument("headless")
     options.add_argument("window-size=1920x1480")
     options.add_argument("--disable-dev-shm-usage")
+    options.add_argument(f'user-agent={userAgent}')
+
     options.binary_location = os.environ.get('GOOGLE_CHROME_BIN')
+
     driver = webdriver.Chrome(executable_path=os.environ.get('CHROMEDRIVER_PATH'), chrome_options=options)
+    """ options = Options()
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-gpu")
+    options.add_argument("headless")
+    options.add_argument("--window-size=1920x1480")
+    options.add_argument("--disable-dev-shm-usage")
+    options.add_argument(f'user-agent={userAgent}')
+
+    driver = webdriver.Chrome(chrome_options=options) """
+
+    allowed_domains = ["booking.com"]
+    start_urls = ['https://www.booking.com/city/fi/helsinki.en-gb.html?label=gen173nr-1BCAEoggI46AdIM1gEaEiIAQGYAQm4AQfIAQzYAQHoAQGIAgGoAgO4Aveuvv4FwAIB0gIkMWZkODFkYTYtY2M5Yy00N2E1LTlhNGItNmQ0YjZmZjkxYTFk2AIF4AIB;sid=d2a36dfc62f9e56716f35a50ec9c0d1d;breadcrumb=searchresults_irene;srpvid=76826ad4b0170334&']
+    page_urls = []
 
     # Function to pagination urls
     def start_requests(self):
-
         # Get today date and 1 day after
         dt = datetime.now()
 
@@ -42,12 +59,12 @@ class PriceSpider(CrawlSpider):
         checkin_monthyear_input = f'{dt.strftime("%B")} {dt.strftime("%Y")}'
         checkin_date_input = f'{dt.day}, {dt.strftime("%A")}'
 
-        self.driver.get('url')
-        time.sleep(4)
+        self.driver.get('https://www.booking.com/city/fi/helsinki.en-gb.html?label=gen173nr-1BCAEoggI46AdIM1gEaEiIAQGYAQm4AQfIAQzYAQHoAQGIAgGoAgO4Aveuvv4FwAIB0gIkMWZkODFkYTYtY2M5Yy00N2E1LTlhNGItNmQ0YjZmZjkxYTFk2AIF4AIB;sid=d2a36dfc62f9e56716f35a50ec9c0d1d;breadcrumb=searchresults_irene;srpvid=76826ad4b0170334&')
+        time.sleep(5)
 
         # Input checkin date and search
         try:
-            wait = WebDriverWait(self.driver, 5)
+            wait = WebDriverWait(self.driver, 10)
             elements = wait.until(
                 EC.presence_of_all_elements_located(
                     (By.CSS_SELECTOR,
@@ -57,13 +74,14 @@ class PriceSpider(CrawlSpider):
                     option.click()
                     break
         except Exception:
+            print("Error in checkin month")
             self.driver.quit()
 
         time.sleep(2)
 
         # Choose checkin day
         try:
-            wait = WebDriverWait(self.driver, 5)
+            wait = WebDriverWait(self.driver, 10)
             elements = wait.until(
                 EC.presence_of_all_elements_located(
                     (By.CSS_SELECTOR,
@@ -73,6 +91,7 @@ class PriceSpider(CrawlSpider):
                     option.click()
                     break
         except Exception:
+            print("Error in checkin day")
             self.driver.quit()
 
         time.sleep(2)
@@ -80,9 +99,12 @@ class PriceSpider(CrawlSpider):
         # Submit search form
         try:
             wait = WebDriverWait(self.driver, 10)
-            element = wait.until(EC.element_to_be_clickable((By.CLASS_NAME, 'sb-searchbox__button ')))
+            element = wait.until(
+                EC.element_to_be_clickable((By.CLASS_NAME, 'sb-searchbox__button '))
+            )
             element.click()
         except Exception:
+            print("CANNOT SUBMIT FORM")
             self.driver.quit()
 
         # Choose hotels filter
@@ -95,6 +117,7 @@ class PriceSpider(CrawlSpider):
                     self.driver.get(link)
                     break
         except Exception:
+            print("CANNOT FIND FILTER HREF")
             self.driver.quit()
 
         time.sleep(3)
@@ -107,35 +130,32 @@ class PriceSpider(CrawlSpider):
             for link in pages:
                 self.page_urls.append(link.get_attribute("href"))
         except Exception:
+            print("CANNOT FIND PAGINATION")
             self.driver.quit()
 
-        time.sleep(5)
-
         for url in self.page_urls:
-            ##selenium_response = self.get_selenium_response(url)
+            # selenium_response = self.get_selenium_response(url)
             yield Request(url, callback=self.parse_property, dont_filter=True)
 
-    # Find element and add to item loader
     def parse_property(self, response):
-
-        container = response.xpath("//div[@id='hotellist_inner']")
-        hotel_containers = container.xpath(
-            ".//div[@class='sr_item  sr_item_new sr_item_default sr_property_block  sr_flex_layout           ']")
-        for hotel_container in hotel_containers:
-            i = ScraperItem()
-            # Find hotel name
-            hotel_name = hotel_container.xpath(".//div[1]/div[1]/div[1]/h3/a/span[1]/text()").extract()[0].strip()
-            i['hotel_name'] = hotel_name
-
-            # Find room type
-            room_type = hotel_container.css("div.room_link span strong::text").extract()[0].strip()
-            i['room_type'] = room_type
-
-            # Find room price
-            room_original = hotel_container.xpath(
-                ".//div[@class='bui-price-display__value prco-inline-block-maker-helper ']/text()").extract()[0].strip()
-            room_price_str = re.sub(r"[^\d]", "", room_original)
-            room_price_int = int(room_price_str)
-            i['room_price'] = room_price_int
-
-            yield i
+        try:
+            container = response.xpath("//div[@id='hotellist_inner']")
+            hotel_containers = container.xpath(
+                ".//div[@class='sr_item  sr_item_new sr_item_default sr_property_block  sr_flex_layout          ']")
+            for hotel_container in hotel_containers:
+                i = ScraperItem()
+                # Find hotel name
+                hotel_name = hotel_container.xpath(".//div[1]/div[1]/div[1]/h3/a/span[1]/text()").extract()[0].strip()
+                i['hotel_name'] = hotel_name
+                # Find room type
+                room_type = hotel_container.css("div.room_link span strong::text").extract()[0].strip()
+                i['room_type'] = room_type
+                # Find room price
+                room_original = hotel_container.xpath(
+                    ".//div[@class='bui-price-display__value prco-inline-block-maker-helper ']/text()").extract()[0].strip()
+                room_price_str = re.sub(r"[^\d]", "", room_original)
+                room_price_int = int(room_price_str)
+                i['room_price'] = room_price_int
+                yield i
+        except:
+            print('Failed to save to DB')

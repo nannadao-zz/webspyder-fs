@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.generics import ListAPIView, RetrieveAPIView
 from rest_framework import permissions
 from datetime import datetime, timezone, timedelta, date
-from django.db.models import Avg, Func, Window
+from django.db.models import Avg, Func
 from django.db import models
 from rest_framework import serializers
 from dateutil.relativedelta import relativedelta
@@ -96,7 +96,8 @@ class HotelNamesView(APIView):
 
             queryset = PriceProperty.objects\
                 .filter(created_date__range=[start_date, end_date])\
-                .values_list('hotel_name', flat=True)
+                .values_list('hotel_name', flat=True)\
+                .distinct()
 
             return Response(list(queryset))
         except:
